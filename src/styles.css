@@ -8,25 +8,11 @@
   display: flex;
   align-items: center;
 }
-.react-js-cron-field {
-  margin-bottom: 10px;
-}
-.react-js-cron-field > span {
-  margin-left: 5px;
-}
-div.react-js-cron-select {
-  margin-left: 5px;
-}
-.react-js-cron-select.react-js-cron-select-no-prefix {
-  margin-left: 0;
-}
 div.react-js-cron-error .react-js-cron-select .ant-select-selector {
   border-color: #ff4d4f;
   background: #fff6f6;
 }
 div.react-js-cron-custom-select {
-  min-width: 70px;
-  z-index: 1;
   background: white;
 }
 div.react-js-cron-error div.react-js-cron-custom-select {
@@ -42,10 +28,6 @@ div.react-js-cron-select.react-js-cron-custom-select.ant-select
   div.react-js-cron-select.react-js-cron-custom-select.ant-select
   div.ant-select-selector {
   padding-right: 11px;
-}
-div.react-js-cron-custom-select .ant-select-selection-search {
-  width: 0 !important;
-  margin: 0 !important;
 }
 div.react-js-cron-custom-select .ant-select-selection-placeholder {
   position: static;
@@ -98,9 +80,6 @@ div.react-js-cron-custom-select .ant-select-selection-placeholder {
   .rc-virtual-list-holder-inner {
   grid-template-columns: repeat(5, 1fr);
 }
-.react-js-cron-period > span:first-child {
-  margin-left: 0 !important;
-}
 .react-js-cron-period
   .react-js-cron-select.ant-select-single.ant-select-open
   .ant-select-selection-item {
@@ -109,10 +88,6 @@ div.react-js-cron-custom-select .ant-select-selection-placeholder {
 .react-js-cron-select-dropdown-period {
   min-width: 0 !important;
   width: auto !important;
-}
-.react-js-cron-clear-button {
-  margin-left: 10px;
-  margin-bottom: 10px;
 }
 .react-js-cron-disabled .react-js-cron-select.ant-select-disabled {
   background: #f5f5f5;
@@ -123,23 +98,30 @@ div.react-js-cron-select.react-js-cron-custom-select.ant-select
   align-items: center;
   flex: initial;
 }
-div.react-js-cron-select.react-js-cron-custom-select.ant-select
-  div.ant-select-selector
-  > .ant-select-selection-overflow
-  > .ant-select-selection-overflow-item:first-child {
-  z-index: -1;
+.react-js-cron-minutes .dropdown__menu {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr);
+  max-width: 250px !important;
+  min-width: 250px !important;
+  width: 250px;
 }
 
-/* To suport antd >= 4.6.0 and < 4.10.0 */
-
-div.react-js-cron-select.react-js-cron-custom-select.ant-select
-  div.ant-select-selector
-  > span:first-child {
-  z-index: -1;
+.react-js-cron-hours .dropdown__menu,
+.react-js-cron-month-days .dropdown__menu {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr);
 }
-div.react-js-cron-select.react-js-cron-custom-select.ant-select
-  div.ant-select-selector
-  > span:first-child
-  > div {
-  z-index: 2;
+
+.react-js-cron-minutes .dropdown__menu > a::after,
+.react-js-cron-hours .dropdown__menu > a::after,
+.react-js-cron-month-days .dropdown__menu > a::after {
+  content: none !important;
+}
+
+.react-js-cron-minutes .dropdown__menu > a,
+.react-js-cron-hours .dropdown__menu > a,
+.react-js-cron-month-days .dropdown__menu > a {
+  padding-right: var(--cui-spacing-half) !important;
+  text-align: center;
+  align-items: center;
 }

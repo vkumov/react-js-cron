@@ -30,6 +30,8 @@ export default function Months(props: MonthsProps) {
     [className]
   )
 
+  const placeholder = locale.emptyMonths || DEFAULT_LOCALE_EN.emptyMonths
+
   return (
     <div className={internalClassName}>
       {locale.prefixMonths !== '' && (
@@ -37,9 +39,8 @@ export default function Months(props: MonthsProps) {
       )}
 
       <CustomSelect
-        placeholder={locale.emptyMonths || DEFAULT_LOCALE_EN.emptyMonths}
+        placeholder={placeholder}
         optionsList={optionsList}
-        grid={false}
         value={value}
         unit={{
           ...UNITS[3],
@@ -54,6 +55,7 @@ export default function Months(props: MonthsProps) {
         disabled={disabled}
         readOnly={readOnly}
         period={period}
+        size={!value || !value.length ? placeholder.length + 1 : undefined}
       />
     </div>
   )

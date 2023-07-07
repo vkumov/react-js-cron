@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
-import { Select } from 'antd'
+import { EditableSelect as Select } from '@vkumov/react-cui-2.0'
 
 import { PeriodProps } from '../types'
 import { DEFAULT_LOCALE_EN } from '../locale'
@@ -78,19 +78,11 @@ export default function Period(props: PeriodProps) {
         'react-js-cron-select': true,
         'react-js-cron-select-no-prefix': locale.prefixPeriod === '',
         [`${className}-select`]: !!className,
+        'qtr-margin-left': true,
+        'qtr-margin-bottom': true,
+        'qtr-margin-right': true,
       }),
     [className, locale.prefixPeriod]
-  )
-
-  const dropdownClassName = useMemo(
-    () =>
-      classNames({
-        'react-js-cron-select-dropdown': true,
-        'react-js-cron-select-dropdown-period': true,
-        [`${className}-select-dropdown`]: !!className,
-        [`${className}-select-dropdown-period`]: !!className,
-      }),
-    [className]
   )
 
   return (
@@ -101,16 +93,18 @@ export default function Period(props: PeriodProps) {
 
       <Select
         key={JSON.stringify(locale)}
-        defaultValue={value}
         value={value}
         onChange={handleChange}
-        options={options}
         className={selectClassName}
-        dropdownClassName={dropdownClassName}
         disabled={disabled}
-        showArrow={!readOnly}
-        open={readOnly ? false : undefined}
-      />
+        size={value.length + 2}
+      >
+        {options.map((opt) => (
+          <option value={opt.value} key={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </Select>
     </div>
   )
 }

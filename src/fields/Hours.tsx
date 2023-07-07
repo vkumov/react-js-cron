@@ -29,6 +29,8 @@ export default function Hours(props: HoursProps) {
     [className]
   )
 
+  const pl = locale.emptyHours || DEFAULT_LOCALE_EN.emptyHours
+
   return (
     <div className={internalClassName}>
       {locale.prefixHours !== '' && (
@@ -36,7 +38,7 @@ export default function Hours(props: HoursProps) {
       )}
 
       <CustomSelect
-        placeholder={locale.emptyHours || DEFAULT_LOCALE_EN.emptyHours}
+        placeholder={pl}
         value={value}
         unit={UNITS[1]}
         setValue={setValue}
@@ -47,6 +49,7 @@ export default function Hours(props: HoursProps) {
         leadingZero={leadingZero}
         clockFormat={clockFormat}
         period={period}
+        size={!value || !value.length ? pl.length + 1 : undefined}
       />
     </div>
   )

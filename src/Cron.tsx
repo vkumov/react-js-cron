@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
-import Button from 'antd/lib/button'
+import { Button } from '@vkumov/react-cui-2.0'
 
 import { CronProps, PeriodType } from './types'
 import Period from './fields/Period'
@@ -12,8 +12,6 @@ import { classNames, setError, usePrevious } from './utils'
 import { DEFAULT_LOCALE_EN } from './locale'
 import { setValuesFromCronString, getCronStringFromValues } from './converter'
 
-import './styles.css'
-
 export default function Cron(props: CronProps) {
   const {
     clearButton = true,
@@ -24,7 +22,7 @@ export default function Cron(props: CronProps) {
     setValue,
     displayError = true,
     onError,
-    className,
+    className = 'react-js-cron',
     defaultPeriod = 'day',
     allowEmpty = 'for-default-value',
     humanizeLabels = true,
@@ -225,6 +223,7 @@ export default function Cron(props: CronProps) {
         'react-js-cron-clear-button': true,
         [`${className}-clear-button`]: !!className,
         [`${clearButtonClassNameProp}`]: !!clearButtonClassNameProp,
+        'qtr-margin-bottom': true,
       }),
     [className, clearButtonClassNameProp]
   )
@@ -236,8 +235,6 @@ export default function Cron(props: CronProps) {
         return (
           <Button
             className={clearButtonClassName}
-            danger
-            type='primary'
             disabled={disabled}
             {...otherClearButtonProps}
             onClick={handleClear}

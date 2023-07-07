@@ -69,6 +69,7 @@ export default function MonthDays(props: MonthDaysProps) {
         readOnly={readOnly}
         leadingZero={leadingZero}
         period={period}
+        size={!value || !value.length ? placeholder.length + 1 : undefined}
       />
     </div>
   ) : null

@@ -29,6 +29,12 @@ export default function Minutes(props: MinutesProps) {
     [className]
   )
 
+  const pl =
+    period === 'hour'
+      ? locale.emptyMinutesForHourPeriod ||
+        DEFAULT_LOCALE_EN.emptyMinutesForHourPeriod
+      : locale.emptyMinutes || DEFAULT_LOCALE_EN.emptyMinutes
+
   return (
     <div className={internalClassName}>
       {period === 'hour'
@@ -45,12 +51,7 @@ export default function Minutes(props: MinutesProps) {
           )}
 
       <CustomSelect
-        placeholder={
-          period === 'hour'
-            ? locale.emptyMinutesForHourPeriod ||
-              DEFAULT_LOCALE_EN.emptyMinutesForHourPeriod
-            : locale.emptyMinutes || DEFAULT_LOCALE_EN.emptyMinutes
-        }
+        placeholder={pl}
         value={value}
         unit={UNITS[0]}
         setValue={setValue}
@@ -61,6 +62,7 @@ export default function Minutes(props: MinutesProps) {
         leadingZero={leadingZero}
         clockFormat={clockFormat}
         period={period}
+        size={!value || !value.length ? pl.length + 1 : undefined}
       />
 
       {period === 'hour' && locale.suffixMinutesForHourPeriod !== '' && (

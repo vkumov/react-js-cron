@@ -1,6 +1,6 @@
-import { SelectProps } from 'antd/lib/select'
 import { Dispatch, SetStateAction } from 'react'
-import { ButtonProps } from 'antd/lib/button'
+import { ButtonProps } from '@vkumov/react-cui-2.0/Button'
+import { EditableSelect } from '@vkumov/react-cui-2.0/Select'
 
 // External props
 
@@ -249,7 +249,7 @@ export interface MinutesProps extends FieldProps {
 }
 export interface CustomSelectProps
   extends Omit<
-    SelectProps<any>,
+    Parameters<typeof EditableSelect>[0],
     | 'mode'
     | 'tokenSeparators'
     | 'allowClear'

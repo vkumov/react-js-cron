@@ -18,6 +18,7 @@ import {
 } from './constants.stories'
 import { ClearButtonAction } from '../types'
 
+import '../styles.css'
 import './styles.stories.css'
 
 export default {
@@ -355,13 +356,6 @@ export function DynamicSettings() {
         leadingZero={leadingZero}
         className={customStyle ? 'my-project-cron' : undefined}
         locale={transformedLocale}
-        clearButtonProps={
-          customStyle
-            ? {
-                type: 'default',
-              }
-            : undefined
-        }
       />
 
       {displayErrorText && (
@@ -1387,9 +1381,6 @@ export function CustomStyle() {
         setValue={customSetValue}
         onError={onError}
         className='my-project-cron'
-        clearButtonProps={{
-          type: 'default',
-        }}
       />
 
       <div>

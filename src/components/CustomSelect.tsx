@@ -1,15 +1,17 @@
-import React, { useMemo, useCallback, useRef } from 'react'
-import Select from 'antd/lib/select'
+import React, { useMemo, useCallback, useRef, Fragment } from 'react'
+import { EditableSelect as Select, Label } from '@vkumov/react-cui-2.0'
 
 import { CustomSelectProps, Clicks } from '../types'
-import { DEFAULT_LOCALE_EN } from '../locale'
 import { classNames, sort } from '../utils'
+import { DEFAULT_LOCALE_EN } from '../locale'
 import { parsePartArray, partToString, formatValue } from '../converter'
+
+const emptyList: number[] = []
 
 export default function CustomSelect(props: CustomSelectProps) {
   const {
     value,
-    grid = true,
+    // grid = true,
     optionsList,
     setValue,
     locale,
@@ -19,7 +21,7 @@ export default function CustomSelect(props: CustomSelectProps) {
     readOnly,
     leadingZero,
     clockFormat,
-    period,
+    // period,
     unit,
     ...otherProps
   } = props
@@ -61,13 +63,14 @@ export default function CustomSelect(props: CustomSelectProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [optionsList, leadingZero, humanizeLabels, clockFormat]
   )
+
   const localeJSON = JSON.stringify(locale)
-  const renderTag = useCallback(
-    (props) => {
+  const renderChip = useCallback(
+    (props: { onDelete: () => unknown; value: string; idx: number }) => {
       const { value: itemValue } = props
 
       if (!value || value[0] !== Number(itemValue)) {
-        return <></>
+        return <Fragment key={itemValue} />
       }
 
       const parsedArray = parsePartArray(value, unit)
@@ -81,13 +84,18 @@ export default function CustomSelect(props: CustomSelectProps) {
       const testEveryValue = cronValue.match(/^\*\/([0-9]+),?/) || []
 
       return (
-        <div>
+        <Label
+          color='light'
+          size='small'
+          key={itemValue}
+          className='no-margin-bottom'
+        >
           {testEveryValue[1]
             ? `${locale.everyText || DEFAULT_LOCALE_EN.everyText} ${
                 testEveryValue[1]
               }`
             : cronValue}
-        </div>
+        </Label>
       )
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -116,7 +124,7 @@ export default function CustomSelect(props: CustomSelectProps) {
       }
 
       if (newValue.length === unit.total) {
-        setValue([])
+        setValue(emptyList)
       } else {
         setValue(newValue)
       }
@@ -144,14 +152,14 @@ export default function CustomSelect(props: CustomSelectProps) {
         const allValuesSelected = newValue.length === options.length
 
         if (allValuesSelected) {
-          setValue([])
+          setValue(emptyList)
         } else if (oldValueEqualNewValue) {
-          setValue([])
+          setValue(emptyList)
         } else {
           setValue(newValue)
         }
       } else {
-        setValue([])
+        setValue(emptyList)
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -170,7 +178,7 @@ export default function CustomSelect(props: CustomSelectProps) {
           value: Number(newValueOption),
         })
 
-        const id = window.setTimeout(() => {
+        window.setTimeout(() => {
           if (
             clicks.length > 1 &&
             clicks[clicks.length - 1].time - clicks[clicks.length - 2].time <
@@ -193,10 +201,6 @@ export default function CustomSelect(props: CustomSelectProps) {
 
           clicksRef.current = []
         }, doubleClickTimeout)
-
-        return () => {
-          window.clearTimeout(id)
-        }
       }
     },
     [clicksRef, simpleClick, doubleClick, readOnly]
@@ -207,7 +211,7 @@ export default function CustomSelect(props: CustomSelectProps) {
     (newValue: any) => {
       if (!readOnly) {
         if (newValue && newValue.length === 0) {
-          setValue([])
+          setValue(emptyList)
         }
       }
     },
@@ -220,64 +224,33 @@ export default function CustomSelect(props: CustomSelectProps) {
         'react-js-cron-select': true,
         'react-js-cron-custom-select': true,
         [`${className}-select`]: !!className,
+        'qtr-margin-left': true,
+        'qtr-margin-bottom': true,
+        'qtr-margin-right': true,
       }),
     [className]
   )
 
-  const dropdownClassNames = useMemo(
-    () =>
-      classNames({
-        'react-js-cron-select-dropdown': true,
-        [`react-js-cron-select-dropdown-${unit.type}`]: true,
-        'react-js-cron-custom-select-dropdown': true,
-        [`react-js-cron-custom-select-dropdown-${unit.type}`]: true,
-        [`react-js-cron-custom-select-dropdown-minutes-large`]:
-          unit.type === 'minutes' && period !== 'hour' && period !== 'day',
-        [`react-js-cron-custom-select-dropdown-minutes-medium`]:
-          unit.type === 'minutes' && (period === 'day' || period === 'hour'),
-        'react-js-cron-custom-select-dropdown-hours-twelve-hour-clock':
-          unit.type === 'hours' && clockFormat === '12-hour-clock',
-        'react-js-cron-custom-select-dropdown-grid': !!grid,
-        [`${className}-select-dropdown`]: !!className,
-        [`${className}-select-dropdown-${unit.type}`]: !!className,
-      }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [className, grid, clockFormat, period]
-  )
-
   return (
     <Select
-      // Use 'multiple' instead of 'tags‘ mode
-      // cf: Issue #2
-      mode='multiple'
-      allowClear={!readOnly}
-      virtual={false}
+      multi
       open={readOnly ? false : undefined}
       value={stringValue}
       onChange={onChange}
-      tagRender={renderTag}
       className={internalClassName}
-      dropdownClassName={dropdownClassNames}
-      options={options}
-      showSearch={false}
-      showArrow={!readOnly}
-      menuItemSelectedIcon={null}
-      dropdownMatchSelectWidth={false}
       onSelect={onOptionClick}
       onDeselect={onOptionClick}
       disabled={disabled}
-      dropdownAlign={
-        (unit.type === 'minutes' || unit.type === 'hours') &&
-        period !== 'day' &&
-        period !== 'hour'
-          ? {
-              // Usage: https://github.com/yiminghe/dom-align
-              // Set direction to left to prevent dropdown to overlap window
-              points: ['tr', 'br'],
-            }
-          : undefined
-      }
+      inline
+      renderChip={renderChip}
+      displayValues
       {...otherProps}
-    />
+    >
+      {options.map((opt) => (
+        <option key={opt.value} value={opt.value}>
+          {opt.label}
+        </option>
+      ))}
+    </Select>
   )
 }
